@@ -12,9 +12,10 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     patch user_path(@user),params: {user: {name: '',
                           email: 'foo@invalid',
                           password: 'foo',
-                          password_confirmation: 'bar'}}
+                          password_confirmation: 'bar',
+                          introduction: 'a' * 141}}
     assert_template 'users/edit'
-    assert_select "div.alert","The form contains 4 errors."
+    assert_select "div.alert","The form contains 5 errors."
   end
   
   test "successful edit" do
@@ -23,10 +24,12 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_template 'users/edit'
     name = 'foo bar'
     email = 'foo@bar.com'
+    introduction = 'text'
     patch user_path(@user),params: {user: {name: name,
                           email: email,
                           password: '',
-                          password_confirmation: ''}}
+                          password_confirmation: '',
+                          introduction: introduction}}
     assert_not flash.empty?
     assert_redirected_to @user
     @user.reload
@@ -40,10 +43,12 @@ class UsersEditTest < ActionDispatch::IntegrationTest
     assert_redirected_to edit_user_url(@user)
     name = 'foo bar'
     email = 'foo@bar.com'
+    introduction = 'text'
     patch user_path(@user),params: {user: {name: name,
                           email: email,
                           password: '',
-                          password_confirmation: ''}}
+                          password_confirmation: '',
+                          introduction: introduction}}
     assert_not flash.empty?
     assert_redirected_to @user
     @user.reload
